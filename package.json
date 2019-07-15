@@ -1,7 +1,7 @@
 {
-  "name": "rock-paper-scissors-server",
+  "name": "bgio-chat-server",
   "version": "0.1.0",
-  "description": "Rock Paper Scissors server with websockets for network multiplayer",
+  "description": "Chat Server based on boardgame.io",
   "main": "build/index.js",
   "files": [
     "build/**/*.js"
@@ -9,10 +9,10 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/lehaSVV2009/tic-tac-toe-server.git"
+    "url": "git+https://github.com/consultchwong/bgio-chat-server.git"
   },
   "keywords": [
-    "tic-tac-toe",
+    "chat",
     "server"
   ],
   "dependencies": {
