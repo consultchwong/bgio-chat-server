@@ -8,33 +8,84 @@
 
 import { Game, TurnOrder, PlayerView } from "boardgame.io/core";
 
-
-const RPS = Game({
-  name: "Rock–paper–scissors",
+const LiveChat = Game({
+  name: "live-chat",
 
   setup: () => ({
-    actions: [null, null],
+    chatSession: {
+      chathere: {
+        topic: "Just Say It",
+        messages: [
+          {
+            avatar: 0,
+            t: "Thanks for joining the chat",
+            dt: "2019-07-11T08:34:35.152Z"
+          }
+        ],
+        subscribers: [0, 2]
+      }
+    },
     players: {
       "0": "secret0",
       "1": "secret1"
-    }
+    },
+    avatars: [
+      {
+        name: "Adam",
+        pic: "https://material-ui.com/static/images/avatar/1.jpg"
+      },
+      {
+        name: "Serpent",
+        pic: "https://material-ui.com/static/images/avatar/2.jpg"
+      },
+      {
+        name: "Eva",
+        pic: "https://material-ui.com/static/images/avatar/3.jpg"
+      }
+    ]
   }),
   playerView: PlayerView.STRIP_SECRETS,
   moves: {
-    takeAction(G, ctx, action) {
-      console.log("takeAction", action);
+    addText(G, ctx, sess_id, a_id, msg) {
+      //console.log("addText", sess_id, msg);
 
-      G.actions[ctx.currentPlayer] = action;
-      console.log("takeAction G.actions", G.actions);
-      console.log("takeAction ret", { ...G });
+      G.chatSession[sess_id].messages.push({
+        avatar: a_id,
+        t: msg,
+        dt: new Date()
+      });
+      //console.log("addText ret", { ...G });
     },
-    takePlayerAction(G, ctx, playerID, action) {
-      console.log("takeAction", action);
+    addAvatar(G, ctx, sess_id, avatar) {
+      //console.log("addAvatar", avatar);
 
-      G.actions[playerID] = -1;
-      G.players[playerID.toString()] = action;
-      console.log("takeAction G.actions", G.actions);
-      console.log("takeAction ret", { ...G });
+      G.chatSession[sess_id].subscribers.push(avatar);
+      //console.log(
+      //  "addAvatar G.chatSession[sess_id].subscribers",
+      //  G.chatSession[sess_id].subscribers
+      //);
+      //console.log("addAvatar ret", { ...G });
+    },
+    invite(G, ctx, sess_id, avatar_id) {
+      //console.log("invite", sess_id, avatar_id);
+
+      G.chatSession[sess_id].subscribers.push(avatar_id);
+      //console.log(
+      //  "invite G.chatSession[sess_id].subscribers",
+      //  G.chatSession[sess_id].subscribers
+      //);
+      //console.log("invite ret", { ...G });
+    },
+    createChatSession(G, ctx, sess_id, topic, player_id) {
+      //console.log("createChatSession", G);
+      //console.log("createChatSession", sess_id, topic, player_id);
+
+      G.chatSession = {
+        ...G.chatSession,
+        [sess_id]: { topic: topic, messages: [], subscribers: [player_id] }
+      };
+      //console.log("createChatSession G.chatSession", G.chatSession);
+      //console.log("createChatSession ret", { ...G });
     }
   },
 
@@ -42,24 +93,9 @@ const RPS = Game({
     movesPerTurn: 1,
     turnOrder: TurnOrder.ANY,
     endGameIf: (G, ctx) => {
-      console.log("endGameIf", G.players);
-      if (G.actions[0] != null && G.actions[1] != null) {
-        if (G.players["0"] === G.players["1"]) {
-          return { draw: true };
-        } else if (G.players["0"] === 0 && G.players["1"] === 2) {
-          return { winner: 0, finalview: G.players };
-        } else if (G.players["0"] === 2 && G.players["1"] === 1) {
-          return { winner: 0, finalview: G.players };
-        } else if (G.players["0"] === 1 && G.players["1"] === 0) {
-          return { winner: 0, finalview: G.players };
-        } else {
-          return { winner: 1, finalview: G.players };
-        }
-      }
+      //console.log("endGameIf", G.players);
     }
   }
 });
 
-
-
-export default RPS;
+export default LiveChat;
