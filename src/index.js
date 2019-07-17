@@ -3,7 +3,7 @@ import { Server } from "./libs/boardgame.io/server";
 import  Game  from "./game";
 import  PlayerProfile  from "./playerprofile";
 
-console.log(Game);
+console.log(PlayerProfile);
 
 const port = process.env.PORT || 8000;
 const server = Server({ games: [Game, PlayerProfile] });
