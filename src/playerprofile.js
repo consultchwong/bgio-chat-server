@@ -10,7 +10,7 @@ import { Game, TurnOrder, PlayerView } from "boardgame.io/core";
 import sha3 from "crypto-js/sha3";
 import CryptoJS from "crypto-js";
 
-export const PlayerProfile = Game({
+const PlayerProfile = Game({
   name: "player-profile",
 
   setup: () => ({
@@ -111,3 +111,5 @@ export const PlayerProfile = Game({
     }
   }
 });
+
+export default PlayerProfile;
