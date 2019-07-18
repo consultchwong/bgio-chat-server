@@ -10,7 +10,7 @@ import { Game, TurnOrder, PlayerView } from "boardgame.io/core";
 import sha3 from "crypto-js/sha3";
 import CryptoJS from "crypto-js";
 
-const PlayerProfile = Game({
+export const PlayerProfile = Game({
   name: "player-profile",
 
   setup: () => ({
@@ -33,20 +33,18 @@ const PlayerProfile = Game({
       }
     },
     players: {
-      "0": {
-        name: "Adam",
-        pic: "https://material-ui.com/static/images/avatar/1.jpg",
-        game_list: [1]
-      },
+      "0": { authenticated: "" },
       "1": {
         name: "Serpent",
         pic: "https://material-ui.com/static/images/avatar/2.jpg",
-        game_list: [1]
+        game_list: [1],
+        nickname: ""
       },
       "2": {
         name: "Eva",
         pic: "https://material-ui.com/static/images/avatar/3.jpg",
-        game_list: [1]
+        game_list: [1],
+        nickname: ""
       }
     }
   }),
@@ -88,7 +86,8 @@ const PlayerProfile = Game({
       var hash = sha3(new Date().toString(), { outputLength: 32 });
       console.log(hash.toString(CryptoJS.enc.Hex));
       var new_room_id = uid + "-" + hash.toString(CryptoJS.enc.Hex);
-      var secret_password = G.secret ? G.secret : "AABBCC";
+      console.log(G.secret);
+      var secret_password = "AABBCC";
       if (pwd === secret_password) {
         G.players[playerID]["token"] = new_room_id;
         G.players[playerID]["authenticated"] = "ok";
@@ -103,13 +102,22 @@ const PlayerProfile = Game({
   },
 
   flow: {
-    numPlayers: 4,
+    numPlayers: 1,
     movesPerTurn: 1,
     turnOrder: TurnOrder.ANY,
+    onMove: (G, ctx) => {
+      Object.keys(G.players).map(key => {
+        console.log(key, G.players[key]["authenticated"]);
+        if (G.players[key]["authenticated"] === "ok") {
+          console.log(G.secret);
+          G.players[key].secret = G.secret;
+          console.log(G.players[key].secret);
+        }
+        return "";
+      });
+    },
     endGameIf: (G, ctx) => {
-      //console.log("endGameIf", G.players);
+      console.log("endGameIf", G.secret);
     }
   }
 });
-
-export default PlayerProfile;
